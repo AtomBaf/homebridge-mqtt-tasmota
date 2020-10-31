@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "homebridge-mqtt-tasmota",
+  "displayName": "Homebridge MQTT Tasmota",
+  "version": "0.0.1",
+  "description": "A homebridge plugin to control tasmota devices via mqtt",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "homekit",
+    "blinds",
+    "shutters",
+    "switch",
+    "tasmota",
+    "mqtt",
+    "sonoff"
+  ],
+  "engines": {
+    "node": ">=10.17.0",
+    "homebridge": ">=1.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atombaf/homebridge-mqtt-tasmota"
+  },
+  "bugs": {
+    "url": "https://github.com/atombaf/homebridge-mqtt-tasmota/issues"
+  },
+  "author": "Fabien G",
+  "license": "MIT",
+  "dependencies": {
+    "homebridge": "^1.1.6",
+    "homebridge-config-ui-x": "^4.31.0",
+    "mqtt": ">1.12.0"
+  }
+}
