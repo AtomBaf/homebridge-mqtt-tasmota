@@ -16,9 +16,9 @@ class MqttTasmotaBaseAccessory {
         this.serialNumberMAC = config['serialNumberMAC'] || ''
 
         // MQTT vars
-        this.mqttUrl = config['mqttBrokerUrl']
-        this.mqttUsername = config['mqttUsername']
-        this.mqttPassword = config['mqttPassword']
+        this.mqttUrl = config['url']
+        this.mqttUsername = config['username']
+        this.mqttPassword = config['password']
         this.mqttClientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
 
         // MQTT options
@@ -52,7 +52,7 @@ class MqttTasmotaBaseAccessory {
  
     onMqttMessage(topic, message) {
         // nothing to do here, should be subclassed
-        this.log('Message received %s, %s', topic, message.toString('utf-8'))
+        // this.log('Message received %s, %s', topic, message.toString('utf-8'))
     }
  
     // Homebridge callback to get service list

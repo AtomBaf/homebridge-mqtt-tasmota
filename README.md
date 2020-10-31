@@ -20,17 +20,17 @@ sudo npm install homebridge-mqtt-tasmota -g
         "pin": "031-45-154"
     },
     "accessories": [{
-      "accessory": "mqtt-tasmota-blinds",
-      "name": "Living Room Blinds",
-      "manufacturer": "DIY",
-      "model": "Prototype",
-      "serialNumberMAC": "01.01.01.01",
-      "mqttBrokerUrl": "mqtt://192.168.0.10:1883",
-      "mqttUsername": "username",
-      "mqttPassword": "password",
-      "mqttTopic": "my_blind",
-      "mqttShutterIndex": "1",
-    }
+        "accessory": "mqtt-tasmota-blinds",
+        "name": "Living Room Blinds",
+        "manufacturer": "DIY",
+        "model": "Prototype",
+        "serialNumberMAC": "01.01.01.01",
+        "url": "mqtt://192.168.0.10:1883",
+        "username": "username",
+        "password": "password",
+        "topic": "my_blind",
+        "shutterIndex": "1",
+      }
     ],
 
     "platforms": [
@@ -40,28 +40,29 @@ sudo npm install homebridge-mqtt-tasmota -g
 ### Basic
 | Variable | Description | Example |
 | --- | --- | --- |
-| accessory | Name of the accessory plugin. | mqtt-blinds-tasmota |
+| accessory | Name of the accessory plugin. | mqtt-tasmota-blinds |
 | name | Name for your blinds. | Living Room Blind |
-| manufacturer | Manufacturer of your blind | DIY |
+| manufacturer | Manufacturer of your device | DIY |
 | model | Model of your blind. | Prototype |
-| serialNumberMAC | Serial number of your blind. | 01.01.01.01 |
+| serialNumberMAC | Serial number of your device. | 01.01.01.01 |
 
-### MQTT
+
+### Blinds and Shutters
 #### Basics
 | Variable | Description | Example |
 | --- | --- | --- |
-| mqttBrokerUrl| IP Adress of your MQTT Broker | mqtt://192.168.0.10:1883 |
-| mqttUsername | Your MQTT Broker username | username |
-| mqttPassword | Your MQTT Broker password | password|
-| mqttTopic | The main topic of your blind | my_blind |
-| mqttShutterIndex | The shutter index in tasmota (could be 1 to 4) | 1 |
+| url| IP Adress of your MQTT Broker | mqtt://192.168.0.10:1883 |
+| username | Your MQTT Broker username | username |
+| password | Your MQTT Broker password | password|
+| topic | The main topic of your blind | my_blind |
+| shutterIndex | The shutter index in tasmota (could be 1 to 4) | 1 |
 
 #### Optional override
-Use these variables to override the computed topics (mqttTopic + mqttShutterIndex). 
+Use these variables to override the computed topics (topic + shutterIndex). 
 
 | Variable | Description | Example | Default Value
 | --- | --- | --- | --- |
-| mqttShutterName | Shutter name as seen in tasmota. | Shutter1 | Shutter{mqttShutterIndex} |
-| mqttTeleTopic | Telemetry topic position from 0 to 100. | /tele/my_blind/SENSOR | /tele/{mqttTopic}/SENSOR |
-| mqttCommandTopic | Topic to set position from 0 to 100. | /cmnd/my_blind/ShutterPosition1 | /cmnd/{mqttTopic}/ShutterPosition{mqttShutterIndex} |
-| mqttResultTopic | Topic to get position from 0 to 100. | /stat/my_blind/RESULT | /stat/{mqttTopic}/RESULT |
+| shutterName | Shutter name as seen in tasmota. | Shutter1 | Shutter{shutterIndex} |
+| teleTopic | Telemetry topic position from 0 to 100. | /tele/my_blind/SENSOR | /tele/{topic}/SENSOR |
+| commandTopic | Topic to set position from 0 to 100. | /cmnd/my_blind/ShutterPosition1 | /cmnd/{topic}/ShutterPosition{shutterIndex} |
+| resultTopic | Topic to get position from 0 to 100. | /stat/my_blind/RESULT | /stat/{topic}/RESULT |

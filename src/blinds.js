@@ -7,13 +7,13 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
 
         super(log, config, api)
 
-        // TASMOTA vars
-        this.mqttTopic = config['mqttTopic']
-        this.mqttShutterIndex = config["mqttShutterIndex"] || "1"
-        this.mqttResultTopic = config["mqttResultTopic"] || 'stat/' + this.mqttTopic + '/RESULT'
-        this.mqttCommandTopic = config["mqttCommandTopic"] || 'cmnd/' + this.mqttTopic + '/ShutterPosition' + this.mqttShutterIndex
-        this.mqttTeleTopic = config["mqttTeleTopic"] || 'tele/' + this.mqttTopic + '/SENSOR'
-        this.mqttShutterName = config["mqttShutterName"]  || "Shutter" + this.mqttShutterIndex
+        // MQTT vars
+        this.mqttTopic = config['topic']
+        this.mqttShutterIndex = config['shutterIndex'] || '1'
+        this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT'
+        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/ShutterPosition' + this.mqttShutterIndex
+        this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/SENSOR'
+        this.mqttShutterName = config['shutterName']  || 'Shutter' + this.mqttShutterIndex
 
 
         // STATE vars

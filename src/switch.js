@@ -8,10 +8,11 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['mqttTopic']
-        this.mqttResultTopic = config["mqttResultTopic"] || 'stat/' + this.mqttTopic + '/RESULT'
-        this.mqttCommandTopic = config["mqttCommandTopic"] || 'cmnd/' + this.mqttTopic + '/POWER'
-        this.mqttTeleTopic = config["mqttTeleTopic"] || 'tele/' + this.mqttTopic + '/STATE'
+        this.mqttTopic = config['topic']
+        this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT'
+        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER'
+        this.mqttCommandStateTopic = config['commandStateTopic'] || 'cmnd/' + this.mqttTopic + '/STATE'
+        this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/STATE'
 
         // STATE vars
         this.currentPower = 'OFF'; // last known power (OFF)
@@ -26,8 +27,8 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
             .on('get', this.onGetOn.bind(this))
             .on('set', this.onSetOn.bind(this))
 
-        // send an empty MQTT command to get the initial state
-        this.mqttClient.publish(this.mqttCommandTopic, null, this.mqttOptions)
+        // send an state MQTT command to get the initial state
+        this.mqttClient.publish(this.mqttCommandStateTopic, null, this.mqttOptions)
     }
 
     // MQTT handler

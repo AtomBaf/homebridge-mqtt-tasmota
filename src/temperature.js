@@ -8,9 +8,9 @@ class MqttTasmotaTemperatureAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['mqttTopic']
-        this.mqttTeleTopic = config["mqttTeleTopic"] || 'tele/' + this.mqttTopic + '/SENSOR'
-        this.mqttCommandTopic = config["mqttCommandTopic"] || 'cmnd/' + this.mqttTopic + '/TelePeriod'
+        this.mqttTopic = config['topic']
+        this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/SENSOR'
+        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/TelePeriod'
 
         // STATE vars
         this.currentTemperature = -99.0; // last known temperature
@@ -24,7 +24,7 @@ class MqttTasmotaTemperatureAccessory extends MqttTasmotaBaseAccessory {
             .on('get', this.onGetOn.bind(this))
 
         // send an empty MQTT command to get the initial state
-        this.mqttClient.publish(this.mqttCommandTopic, 1, this.mqttOptions)
+        this.mqttClient.publish(this.mqttCommandTopic, '1', this.mqttOptions)
     }
 
     // MQTT handler
