@@ -2,7 +2,7 @@
   "private": false,
   "name": "homebridge-mqtt-tasmota",
   "displayName": "Homebridge MQTT Tasmota",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A homebridge plugin to control tasmota devices via mqtt",
   "main": "src/index.js",
   "scripts": {
@@ -32,8 +32,6 @@
   "author": "Fabien G",
   "license": "MIT",
   "dependencies": {
-    "homebridge": "^1.1.6",
-    "homebridge-config-ui-x": "^4.31.0",
     "mqtt": ">1.12.0"
   }
 }

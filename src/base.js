@@ -52,6 +52,7 @@ class MqttTasmotaBaseAccessory {
  
     onMqttMessage(topic, message) {
         // nothing to do here, should be subclassed
+        this.log('Message received %s, %s', topic, message.toString('utf-8'))
     }
  
     // Homebridge callback to get service list
