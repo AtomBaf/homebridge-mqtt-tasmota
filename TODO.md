@@ -1,0 +1,4 @@
+ - for malfunctioning devices, get their state at startup and show them as broken
+ - auto-discover all tasmota devices with a platform API
+ - add support for power switch
+ - add logs for sensors (temp, hum, watt, ...)
