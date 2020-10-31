@@ -1,16 +1,16 @@
-# homebridge-mqtt-blinds-tasmota
-This is a homebridge plugin to control blinds/shutters via mqtt.
+# homebridge-mqtt-tasmota
+This is a homebridge plugin to control various tasmota devices via mqtt.
 
 ## Installation
 
 If you are new to Homebridge, please first read the Homebridge documentation. To install the plugin use:
 ```
-sudo npm install homebridge-mqtt-blinds-tasmota -g
+sudo npm install homebridge-mqtt-tasmota -g
 ```
 
 ## Configuration
 
-### config.json example (generic)
+### config.json example (for blinds)
 ```
 {
     "bridge": {
@@ -20,8 +20,8 @@ sudo npm install homebridge-mqtt-blinds-tasmota -g
         "pin": "031-45-154"
     },
     "accessories": [{
-      "accessory": "mqtt-blinds-tasmota",
-      "name": "Living Room Blind",
+      "accessory": "mqtt-tasmota-blinds",
+      "name": "Living Room Blinds",
       "manufacturer": "DIY",
       "model": "Prototype",
       "serialNumberMAC": "01.01.01.01",

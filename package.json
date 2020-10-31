@@ -1,5 +1,5 @@
 {
-  "private": true,
+  "private": false,
   "name": "homebridge-mqtt-tasmota",
   "displayName": "Homebridge MQTT Tasmota",
   "version": "0.0.1",
