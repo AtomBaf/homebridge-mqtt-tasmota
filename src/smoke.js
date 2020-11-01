@@ -1,4 +1,4 @@
-var MqttTasmotaBaseAccessory = require('./base')
+var MqttTasmotaBaseAccessory = require('./accessory')
 
 
 class MqttTasmotaSmokeAccessory extends MqttTasmotaBaseAccessory {
