@@ -3,7 +3,7 @@ var mqtt = require('mqtt')
 
 class MqttTasmotaBase {
 
-    constructor(log, config, api) {
+    constructor(log, config, api, autoConnect=true) {
         // GLOBAL vars
         this.log = log
         this.config = config
@@ -29,11 +29,17 @@ class MqttTasmotaBase {
             rejectUnauthorized: false
         }
 
+        if (autoConnect) {
+            this.connectMqttClient()
+        }
+    }
+
+    connectMqttClient() {
         this.log('Connecting to MQTT broker on %s', this.mqttUrl)
         this.mqttClient = mqtt.connect(this.mqttUrl, this.mqttOptions)
         this.mqttClient.on('error', this.onMqttError.bind(this))
         this.mqttClient.on('connect', this.onMqttConnect.bind(this))
-        this.mqttClient.on('message', this.onMqttMessage.bind(this))
+        this.mqttClient.on('message', this.onMqttMessage.bind(this))        
     }
 
     onMqttError() {
