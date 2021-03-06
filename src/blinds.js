@@ -1,5 +1,5 @@
 var MqttTasmotaBaseAccessory = require('./accessory')
-
+var counter = 0
 
 class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
 
@@ -14,7 +14,6 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
         this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/ShutterPosition' + this.mqttShutterIndex
         this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/SENSOR'
         this.mqttShutterName = config['shutterName']  || 'Shutter' + this.mqttShutterIndex
-
 
         // STATE vars
         this.lastPosition = 100; // last known position of the blinds (open)
@@ -125,9 +124,22 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
     }
 
     onSetTargetPosition(pos, callback) {
-        this.log('Set TargetPosition: %s', pos)
-        this.mqttClient.publish(this.mqttCommandTopic, pos.toString(), this.mqttOptions)
-        callback(null)
+        this.log('Set TargetPosition: %s', pos)           
+        // multiple instances of this class might conflict with each other
+        // especially if using RF remotes behind the scene
+        // So create a 'counter' which will help on synchronization
+        var delay = 1500 // ms
+
+        setTimeout(() => {
+            this.log('Set TargetPosition after delay: %d', counter * delay)
+            this.mqttClient.publish(this.mqttCommandTopic, pos.toString(), this.mqttOptions)
+            counter--
+            if (counter < 0) {
+                counter = 0
+            }
+            callback(null)
+        }, counter * delay)
+        counter++
     }
 }
 
