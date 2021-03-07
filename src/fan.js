@@ -67,7 +67,7 @@ class MqttTasmotaFanAccessory extends MqttTasmotaBaseAccessory {
     onSetOn(power, callback) {
         this.log('Set Power: %s', power)
         this.currentSpeed = !power ? 0 : this.currentSpeed == 0 ? 3 : this.currentSpeed
-        this.mqttClient.publish(this.mqttCommandTopic, this.currentSpeed, this.mqttOptions)
+        this.mqttClient.publish(this.mqttCommandTopic, "" + this.currentSpeed, this.mqttOptions)
         callback(null)
     }
 
@@ -79,7 +79,7 @@ class MqttTasmotaFanAccessory extends MqttTasmotaBaseAccessory {
     onSetSpeed(speed, callback) {
         this.log('Set Speed: %s', speed)
         this.currentSpeed = speed
-        this.mqttClient.publish(this.mqttCommandTopic, this.currentSpeed, this.mqttOptions)
+        this.mqttClient.publish(this.mqttCommandTopic, "" + this.currentSpeed, this.mqttOptions)
         callback(null)
     }
 }
