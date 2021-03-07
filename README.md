@@ -5,7 +5,7 @@ Since Tasmota MQTT topics are well known for a given device type, all the MQTT t
 
 
 ## Tested with
- - Tasmota 8.5.1 Hannah
+ - Tasmota 9.3.1 Kenneth
  - Sonoff devices :
     - RFR3
     - MINI
@@ -31,7 +31,7 @@ sudo npm install homebridge-mqtt-tasmota -g
 
 ## Common Configuration settings
 
-### config.json example (for blinds)
+### config.json example (for blinds, switches, humidity, smoke, temp, and fan)
 ```
 {
     "bridge": {
@@ -40,19 +40,60 @@ sudo npm install homebridge-mqtt-tasmota -g
         "port": 51826,
         "pin": "031-45-154"
     },
-    "accessories": [{
-        "accessory": "mqtt-tasmota-blinds",
-        "name": "Living Room Blinds",
-        "url": "mqtt://192.168.0.10:1883",
-        "topic": "my_blind",
-        "shutterIndex": "1",
-      }
+    "accessories": [
+        {
+            "accessory": "mqtt-tasmota-blinds",
+            "name": "Living Room Blinds",
+            "url": "mqtt://192.168.0.3",
+            "topic": "living_room_shutter",
+            "shutterIndex": "1"
+        },
+        {
+            "accessory": "mqtt-tasmota-switch",
+            "name": "Salon",
+            "url": "mqtt://192.168.0.3",
+            "topic": "lounge_switch"
+        },
+        {
+            "accessory": "mqtt-tasmota-smoke",
+            "name": "Kitchen Smoke",
+            "url": "mqtt://192.168.0.3",
+            "topic": "smoke_alarm_kitchen"
+        },
+        {
+            "accessory": "mqtt-tasmota-humidity",
+            "name": "Lounge Humidity",
+            "url": "mqtt://192.168.0.3",
+            "topic": "lounge_temp"
+        },
+        {
+            "accessory": "mqtt-tasmota-temperature",
+            "name": "Lounge Temp",
+            "url": "mqtt://192.168.0.3",
+            "topic": "lounge_temp"
+        },
+        {
+            "accessory": "mqtt-tasmota-fan",
+            "name": "Fan",
+            "url": "mqtt://192.168.0.3",
+            "topic": "lounge_fan"
+        }
     ],
 
     "platforms": [
     ]
 }
 ```
+### Supported accessories
+
+ - mqtt-tasmota-blinds
+ - mqtt-tasmota-switch
+ - mqtt-tasmota-temperature
+ - mqtt-tasmota-humidity
+ - mqtt-tasmota-fan
+ - mqtt-tasmota-smoke
+
+
 ### Common Mandatory settings
 | Variable | Description | Example |
 | --- | --- | --- |
