@@ -50,9 +50,23 @@ sudo npm install homebridge-mqtt-tasmota -g
         },
         {
             "accessory": "mqtt-tasmota-switch",
-            "name": "Salon",
+            "name": "Lounge",
             "url": "mqtt://192.168.0.3",
             "topic": "lounge_switch"
+        },
+        {
+            "accessory": "mqtt-tasmota-switch",
+            "name": "Dual Switch 1",
+            "url": "mqtt://192.168.0.3",
+            "topic": "dual_switch",
+            "switchIndex": "1"
+        },
+        {
+            "accessory": "mqtt-tasmota-switch",
+            "name": "Dual Switch 2",
+            "url": "mqtt://192.168.0.3",
+            "topic": "dual_switch",
+            "switchIndex": "2"
         },
         {
             "accessory": "mqtt-tasmota-smoke",
@@ -64,7 +78,7 @@ sudo npm install homebridge-mqtt-tasmota -g
             "accessory": "mqtt-tasmota-humidity",
             "name": "Lounge Humidity",
             "url": "mqtt://192.168.0.3",
-            "topic": "lounge_temp"
+            "topic": "lounge_temp"  
         },
         {
             "accessory": "mqtt-tasmota-temperature",
