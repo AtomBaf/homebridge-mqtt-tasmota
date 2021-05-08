@@ -5,7 +5,7 @@ Since Tasmota MQTT topics are well known for a given device type, all the MQTT t
 
 
 ## Tested with
- - Tasmota 9.3.1 Kenneth
+ - Tasmota 9.3.1 Kenneth and 9.4.0 Leslie
  - Sonoff devices :
     - RFR3
     - MINI
@@ -14,6 +14,7 @@ Since Tasmota MQTT topics are well known for a given device type, all the MQTT t
     - S26
     - 4CHPROR2
     - 433 RF Bridge (with smoke alarms)
+    - T1 (dual switch)
   - Homemade ESP8266 Temperature sensor
 
 ## TODO
@@ -125,6 +126,14 @@ sudo npm install homebridge-mqtt-tasmota -g
 | manufacturer | Manufacturer of your device | DIY |
 | model | Model of your blind. | Prototype |
 | serialNumberMAC | Serial number of your device. | 01.01.01.01 |
+
+
+
+## Dedicated Switch settings
+### Optional settings
+| Variable | Description | Example | Default Value
+| --- | --- | --- | --- |
+| switchIndex | The switch index in tasmota (could be 1 to 4, default blank) | 1 | |
 
 
 ## Dedicated Blinds and Shutters settings
