@@ -42,8 +42,8 @@ class MqttTasmotaBase {
         this.mqttClient.on('message', this.onMqttMessage.bind(this))        
     }
 
-    onMqttError() {
-        this.log('Error event on MQTT')
+    onMqttError(e) {
+        this.log('Error event on MQTT', e.message)
     }
  
     onMqttConnect() {
