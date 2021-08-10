@@ -96,6 +96,11 @@ sudo npm install homebridge-mqtt-tasmota -g
     ],
 
     "platforms": [
+        {
+            "platform": "mqtt-tasmota",
+            "name": "mqtt-tasmota",
+            "url": "mqtt://192.168.0.3"
+        }
     ]
 }
 ```
