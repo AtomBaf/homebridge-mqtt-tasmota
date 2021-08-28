@@ -5,7 +5,7 @@ Since Tasmota MQTT topics are well known for a given device type, all the MQTT t
 
 
 ## Tested with
- - Tasmota 9.3.1 Kenneth and 9.4.0 Leslie
+ - Tasmota 9.3.1 Kenneth, 9.4.0 Leslie, 9.5.0 Michael
  - Sonoff devices :
     - RFR3
     - MINI
@@ -32,7 +32,7 @@ sudo npm install homebridge-mqtt-tasmota -g
 
 ## Common Configuration settings
 
-### config.json example (for blinds, switches, humidity, smoke, temp, and fan)
+### config.json example (for blinds, switches, humidity, smoke, doorbell, temp, and fan)
 ```
 {
     "bridge": {
@@ -74,6 +74,12 @@ sudo npm install homebridge-mqtt-tasmota -g
             "name": "Kitchen Smoke",
             "url": "mqtt://192.168.0.3",
             "topic": "smoke_alarm_kitchen"
+        },
+        {
+            "accessory": "mqtt-tasmota-doorbell",
+            "name": "Main Door Bell",
+            "url": "mqtt://192.168.0.3",
+            "topic": "door_bell"
         },
         {
             "accessory": "mqtt-tasmota-humidity",
