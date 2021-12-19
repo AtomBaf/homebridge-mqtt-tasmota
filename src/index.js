@@ -5,17 +5,32 @@ var humidity = require('./humidity')
 var smoke = require('./smoke')
 var doorbell = require('./doorbell')
 var fan = require('./fan')
-var platform = require('./platform')
 
+
+handlers = {
+    'blinds': blinds,
+    'switch': switches,
+    'temperature': temperature,
+    'humidity': humidity,
+    'smoke': smoke,
+    'doorbell': doorbell,
+    'fan': fan
+}
+
+class MqttTasmotaAccessory {
+
+    constructor(log, config, api) {
+
+        this.type = config['type']
+        this.handler = new handlers[this.type](log, config, api)
+    }
+
+    // Homebridge callback to get service list
+    getServices() {
+        return this.handler.getServices()
+    }
+}
 
 module.exports = (api) => {
-    api.registerAccessory('mqtt-tasmota-blinds', blinds)
-    api.registerAccessory('mqtt-tasmota-switch', switches)
-    api.registerAccessory('mqtt-tasmota-temperature', temperature)
-    api.registerAccessory('mqtt-tasmota-humidity', humidity)
-    api.registerAccessory('mqtt-tasmota-smoke', smoke)
-    api.registerAccessory('mqtt-tasmota-doorbell', doorbell)
-    api.registerAccessory('mqtt-tasmota-fan', fan)
-
-    api.registerPlatform('mqtt-tasmota', platform)
+    api.registerAccessory('mqtt-tasmota', MqttTasmotaAccessory)
 }

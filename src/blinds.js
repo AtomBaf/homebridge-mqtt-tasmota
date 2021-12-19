@@ -9,11 +9,11 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
 
         // MQTT vars
         this.mqttTopic = config['topic']
-        this.mqttShutterIndex = config['shutterIndex'] || '1'
+        this.mqttIndex = config['index'] || '1'
         this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT'
-        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/ShutterPosition' + this.mqttShutterIndex
+        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/ShutterPosition' + this.mqttIndex
         this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/SENSOR'
-        this.mqttShutterName = config['shutterName']  || 'Shutter' + this.mqttShutterIndex
+        this.mqttShutterName = config['shutterName']  || 'Shutter' + this.mqttIndex
 
         // STATE vars
         this.lastPosition = 100; // last known position of the blinds (open)
