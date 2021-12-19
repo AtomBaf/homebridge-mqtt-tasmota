@@ -1,0 +1,128 @@
+{
+  "pluginAlias": "mqtt-tasmota",
+  "pluginType": "accessory",
+  "layout": [{
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": ["name"]
+    },
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": ["topic"]
+    },
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": [{
+          "key": "type",
+          "flex": "4 4 400px"
+        },
+        {
+          "key": "index",
+          "flex": "2 2 200px"
+        }
+      ]
+    },
+
+    {
+      "type": "flex",
+      "flex-flow": "row wrap",
+      "items": [
+        {
+          "flex": "3 3 300px",
+          "key": "url"
+        },
+        {
+          "flex": "2 2 200px",
+          "key": "username"
+        },
+        {
+          "flex": "2 2 200px",
+          "key": "password",
+          "type": "password"
+        }
+      ]
+    }
+  ],
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "required": true,
+        "description": "Name of accessory, as shown in HomeKit."
+      },
+      "type": {
+        "title": "Type",
+        "required": true,
+        "type": "string",
+        "default": "switch",
+        "oneOf": [{
+            "title": "Switch",
+            "enum": ["switch"]
+          },
+          {
+            "title": "Fan",
+            "enum": ["fan"]
+          },
+          {
+            "title": "Temperature sensor",
+            "enum": ["temperature"]
+          },
+          {
+            "title": "Humidity sensor",
+            "enum": ["humidity"]
+          },
+          {
+            "title": "Smoke detector",
+            "enum": ["smoke"]
+          },
+          {
+            "title": "Doorbell",
+            "enum": ["doorbell"]
+          },
+          {
+            "title": "Blinds & Shutters",
+            "enum": ["blinds"]
+          }
+        ]
+      },
+      "url": {
+        "title": "MQTT Broker URL",
+        "type": "string",
+        "required": true,
+        "format": "uri",
+        "default": "mqtt://localhost:1883",
+        "description": "URL for MQTT broker"
+      },
+      "username": {
+        "title": "Username",
+        "type": "string",
+        "required": false,
+        "description": "Username for MQTT broker (optional)"
+      },
+      "password": {
+        "title": "Password",
+        "type": "string",
+        "required": false,
+        "description": "Password for MQTT broker (optional)"
+      },
+      "topic": {
+        "title": "Topic",
+        "type": "string",
+        "required": true,
+        "description": "Tasmota device topic, as shown in its MQTT settings"
+      },
+      "index": {
+        "title": "Index",
+        "type": "integer",
+        "condition": {
+          "functionBody": "return model.type === 'switch' || model.type === 'blinds';"
+        },
+        "minimum": 1
+      }
+    }
+  }
+}

@@ -9,9 +9,9 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
 
         // TASMOTA vars
         this.mqttTopic = config['topic']
-        this.switchIndex = config['switchIndex'] || ''
+        this.index = config['index'] || ''
         this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT' 
-        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER' + this.switchIndex
+        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER' + this.index
         this.mqttCommandStateTopic = config['commandStateTopic'] || 'cmnd/' + this.mqttTopic + '/STATE'
         this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/STATE'
 
@@ -43,9 +43,9 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
         //  - STAT : {"POWER":"OFF"}
         message = JSON.parse(message.toString('utf-8'))
 
-        if (message.hasOwnProperty('POWER' + this.switchIndex)) {
+        if (message.hasOwnProperty('POWER' + this.index)) {
             // update CurrentState
-            this.currentPower = message['POWER' + this.switchIndex]
+            this.currentPower = message['POWER' + this.index]
             this.service
                 .getCharacteristic(this.api.hap.Characteristic.On)
                 .updateValue(this.currentPower === 'ON')
