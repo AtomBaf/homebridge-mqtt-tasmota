@@ -1,5 +1,11 @@
 
 # homebridge-mqtt-tasmota
+
+[![verified-by-homebridge](https://badgen.net/badge/homebridge/verified/purple)](https://github.com/homebridge/homebridge/wiki/Verified-Plugins)
+[![npm](https://badgen.net/npm/dt/homebridge-mqtt-tasmota?color=purple)](https://www.npmjs.com/package/homebridge-mqtt-tasmota)
+[![npm](https://badgen.net/npm/v/homebridge-mqtt-tasmota?color=purple)](https://www.npmjs.com/package/homebridge-mqtt-tasmota)
+
+
 This is an all-in-one homebridge plugin to control various tasmota devices via MQTT.
 
 Since Tasmota MQTT topics are well known for a given device type, all the MQTT topics will be computed according to the device name (%topic% in the tasmota settings).
