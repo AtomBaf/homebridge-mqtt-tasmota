@@ -9,7 +9,15 @@
     {
       "type": "flex",
       "flex-flow": "row wrap",
-      "items": ["topic"]
+      "items": [{
+          "key": "topic",
+          "flex": "5 5 500px"
+        },
+        {
+          "key": "debug",
+          "flex": "1 1 100px",
+          "default": false
+        }]
     },
     {
       "type": "flex",
@@ -114,6 +122,12 @@
         "type": "string",
         "required": true,
         "description": "Tasmota device topic, as shown in its MQTT settings"
+      },
+      "debug": {
+        "title": "Debug",
+        "type": "boolean",
+        "required": false,
+        "default": false
       },
       "index": {
         "title": "Index",

@@ -10,6 +10,7 @@ class MqttTasmotaBase {
         this.api = api
 
         // MQTT vars
+        this.mqttDebug = config['debug'] || false
         this.mqttUrl = config['url']
         this.mqttUsername = config['username']
         this.mqttPassword = config['password']
@@ -51,7 +52,9 @@ class MqttTasmotaBase {
     }
  
     onMqttMessage(topic, message) {
-        // this.log('Message received %s, %s', topic, message.toString('utf-8'))
+        if (this.mqttDebug) {
+            this.log('Message received %s, %s', topic, message.toString('utf-8'))
+        }
     }
 }
 
