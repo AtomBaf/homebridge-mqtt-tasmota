@@ -171,6 +171,7 @@ One single `mqtt-tasmota` type is supported, with `type` as one of:
 | name | Name for your device. | Living Room Blind |
 | url | MQTT broker URL. | mqtt://192.168.0.10:1883 |
 | topic | MQTT topic part related to the device. (will be used to compose actual tasmota topics) | my_blind |
+| debug | Debug incoming MQTT messages for the device | true |
 
 
 ### Common Optional settings
