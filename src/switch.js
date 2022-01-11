@@ -9,9 +9,9 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
 
         // TASMOTA vars
         this.mqttTopic = config['topic']
-        this.index = config['index'] || ''
+        this.mqttIndex = config['index'] || ''
         this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT' 
-        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER' + this.index
+        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER' + this.mqttIndex
         this.mqttCommandStateTopic = config['commandStateTopic'] || 'cmnd/' + this.mqttTopic + '/STATE'
         this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/STATE'
 
@@ -41,11 +41,16 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
         // JSON format is nearly the same, eg:
         //  - TELE : {...,"POWER":"OFF",...}
         //  - STAT : {"POWER":"OFF"}
+        // also, when using an mqttIndex > 1 the POWER property will be POWER2, POWER3, ...
+
         message = JSON.parse(message.toString('utf-8'))
 
-        if (message.hasOwnProperty('POWER' + this.index)) {
+        var isPower1 = message.hasOwnProperty('POWER') && this.mqttIndex == 1
+        var isPowerN = message.hasOwnProperty('POWER' + this.mqttIndex)
+
+        if (isPower1 || isPowerN) {
             // update CurrentState
-            this.currentPower = message['POWER' + this.index]
+            this.currentPower = isPower1 ? message['POWER'] : message['POWER' + this.mqttIndex]
             this.service
                 .getCharacteristic(this.api.hap.Characteristic.On)
                 .updateValue(this.currentPower === 'ON')
