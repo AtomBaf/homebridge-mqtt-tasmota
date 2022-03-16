@@ -70,6 +70,9 @@
         "oneOf": [{
             "title": "Switch",
             "enum": ["switch"]
+          },{
+            "title": "Light Bulb",
+            "enum": ["lightbulb"]
           },
           {
             "title": "Fan",
