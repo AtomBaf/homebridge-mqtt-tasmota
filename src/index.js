@@ -5,6 +5,7 @@ var humidity = require('./humidity')
 var smoke = require('./smoke')
 var doorbell = require('./doorbell')
 var fan = require('./fan')
+var lightbulb = require('./lightbulb')
 
 
 handlers = {
@@ -14,7 +15,8 @@ handlers = {
     'humidity': humidity,
     'smoke': smoke,
     'doorbell': doorbell,
-    'fan': fan
+    'fan': fan,
+    'lightbulb': lightbulb
 }
 
 class MqttTasmotaAccessory {
