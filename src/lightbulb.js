@@ -98,7 +98,7 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
     onSetBrightness(brightness, callback) {
         this.log('Set Brighness: %d', brightness)
         this.currentBrightness = brightness
-        this.mqttClient.publish(this.mqttCommandTopic, "" + this.currentBrightness, this.mqttOptions)
+        this.mqttClient.publish(this.mqttDimmerTopic, "" + this.currentBrightness, this.mqttOptions)
         callback(null)
     }
 }
