@@ -1,7 +1,8 @@
 var MqttTasmotaBaseAccessory = require('./accessory')
 
 
-class MqttTasmotaTemperatureAccessory extends MqttTasmotaBaseAccessory {
+// TODO refactor with temperature accessory
+class MqttTasmotaSensorAccessory extends MqttTasmotaBaseAccessory {
 
     constructor(log, config, api) {
 
@@ -13,15 +14,21 @@ class MqttTasmotaTemperatureAccessory extends MqttTasmotaBaseAccessory {
         this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/TelePeriod'
 
         // STATE vars
+        this.currentHumidity = -99; // last known Humidity
         this.currentTemperature = -99.0; // last known temperature
 
         this.mqttClient.subscribe(this.mqttTeleTopic)
 
         // register the service and provide the callback functions
-        this.service = new this.api.hap.Service.TemperatureSensor(this.name)
-        this.service
+        this.humService = new this.api.hap.Service.HumiditySensor(this.name)
+        this.humService
+            .getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
+            .on('get', this.onGetCurrentRelativeHumidity.bind(this))
+
+        this.tempService = new this.api.hap.Service.TemperatureSensor(this.name)
+        this.tempService
             .getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
-            .on('get', this.onGetOn.bind(this))
+            .on('get', this.onGetCurrentTemperature.bind(this))
 
         // send an empty MQTT command to get the initial state
         this.mqttClient.publish(this.mqttCommandTopic, '1', this.mqttOptions)
@@ -42,21 +49,39 @@ class MqttTasmotaTemperatureAccessory extends MqttTasmotaBaseAccessory {
 
             if (message.hasOwnProperty(sensor)) {
                 // update CurrentState
+                this.currentHumidity = parseFloat(message[sensor]['Humidity'])
+                this.humService
+                    .getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
+                    .updateValue(this.currentHumidity)
+                this.log('Updated CurrentHumidity: %f', this.currentHumidity)
+
                 this.currentTemperature = parseFloat(message[sensor]['Temperature'])
-                this.service
+                this.tempService
                     .getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
                     .updateValue(this.currentTemperature)
                 this.log('Updated CurrentTemperature: %f', this.currentTemperature)
+
                 break
             }
         }
     }
 
     // Homebridge handlers
-    onGetOn(callback) {
+    getServices() {
+        var services = super.getServices()
+        services.push(this.tempService)
+        services.push(this.humService)
+        return services
+    }
+    onGetCurrentRelativeHumidity(callback) {
+        this.log('Requested CurrentHumidity: %f', this.currentHumidity)
+        callback(null, this.currentHumidity)
+    }
+
+    onGetCurrentTemperature(callback) {
         this.log('Requested CurrentTemperature: %f', this.currentTemperature)
         callback(null, this.currentTemperature)
     }
 }
 
-module.exports = MqttTasmotaTemperatureAccessory
+module.exports = MqttTasmotaSensorAccessory
