@@ -7,35 +7,47 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
 
         super(log, config, api)
 
+        // device setup
+        this.icon = config['icon'] || 'lightbulb'
+
         // TASMOTA vars
         this.mqttTopic = config['topic']
         this.mqttIndex = config['index'] || ''
         this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT' 
         this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER' + this.mqttIndex
         this.mqttCommandStateTopic = config['commandStateTopic'] || 'cmnd/' + this.mqttTopic + '/STATE'
-        this.mqttDimmerTopic = config['dimmerTopic'] || 'cmnd/' + this.mqttTopic + '/Dimmer' + this.mqttIndex
+        this.mqttCommandHueTopic = config['commandHueTopic'] || 'cmnd/' + this.mqttTopic + '/hsbcolor1' + this.mqttIndex
+        this.mqttCommandSaturationTopic = config['commandSaturationTopic'] || 'cmnd/' + this.mqttTopic + '/hsbcolor2' + this.mqttIndex
+        this.mqttCommandBrightnessTopic = config['commandBrightnessTopic'] || config['commandDimmerTopic'] || 'cmnd/' + this.mqttTopic + '/Dimmer' + this.mqttIndex
         this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/STATE'
 
         // STATE vars
         this.currentPower = 'OFF'; // last known power (OFF)
-        this.currentBrightness = 0; // last known brightness (0)
+        this.currentHue = 0; // last known hue (0)
+        this.currentSaturation = 0; // last known saturation (0)
+        this.currentBrightness = 100; // last known brightness (100)
 
         this.mqttClient.subscribe(this.mqttResultTopic)
         this.mqttClient.subscribe(this.mqttTeleTopic)
 
-        // register the service and provide the callback functions
-        this.service = new this.api.hap.Service.Lightbulb(this.name)
+        switch (this.icon) {
+            case 'switch':
+                this.service = new this.api.hap.Service.Switch(this.name)
+                break;
+            case 'lightbulb':
+                this.service = new this.api.hap.Service.Lightbulb(this.name)
+                break;
+            default:
+                this.log('Unknown icon type "' + this.icon + '", defaulting to "lightbulb"');
+                this.service = new this.api.hap.Service.Lightbulb(this.name)
+        }
+
         this.service
             .getCharacteristic(this.api.hap.Characteristic.On)
             .on('get', this.onGetOn.bind(this))
             .on('set', this.onSetOn.bind(this))
 
-        this.service
-            .getCharacteristic(this.api.hap.Characteristic.Brightness)
-            .on('get', this.onGetBrightness.bind(this))
-            .on('set', this.onSetBrightness.bind(this));
-
-        // send an state MQTT command to get the initial state
+        // send a state MQTT command to get the initial state
         this.mqttClient.publish(this.mqttCommandStateTopic, null, this.mqttOptions)
     }
 
@@ -48,6 +60,9 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
         // JSON format is nearly the same, eg:
         //  - TELE : {...,"POWER":"OFF",...}
         //  - STAT : {"POWER":"OFF"}
+        // Examples:
+        //  - STAT for LightBulb w/ HSB:
+        //    {..., "POWER":"OFF","Dimmer":0,"Color":"000000","HSBColor":"30,67,0","Channel":[0,0,0],"Scheme":0,"Fade":"OFF","Speed":1,"LedTable":"ON",...}
         // also, when using an mqttIndex > 1 the POWER property will be POWER2, POWER3, ...
 
         message = JSON.parse(message.toString('utf-8'))
@@ -64,10 +79,57 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
             this.log('Updated CurrentPower: %s', this.currentPower)
         }
 
+        var isHue1 = message.hasOwnProperty('HSBColor') && this.mqttIndex == 1
+        var isHueN = message.hasOwnProperty('HSBColor' + this.mqttIndex)
+
+        if (isHue1 || isHueN) {
+            if (!this.service.testCharacteristic(this.api.hap.Characteristic.Hue)) {
+                this.log('Adding Hue Characteristic')
+                this.service
+                    .getCharacteristic(this.api.hap.Characteristic.Hue)
+                    .on('get', this.onGetHue.bind(this))
+                    .on('set', this.onSetHue.bind(this));
+            }
+            // update CurrentHue
+            this.currentHue = isHue1 ? message['HSBColor'] : message['HSBColor' + this.mqttIndex]
+            this.currentHue = parseInt(this.currentHue.split(',')[0])
+            this.service
+                .getCharacteristic(this.api.hap.Characteristic.Hue)
+                .updateValue(this.currentHue)
+            this.log('Updated CurrentHue: %d', this.currentHue)
+        }
+
+        var isSaturation1 = message.hasOwnProperty('HSBColor') && this.mqttIndex == 1
+        var isSaturationN = message.hasOwnProperty('HSBColor' + this.mqttIndex)
+
+        if (isSaturation1 || isSaturationN) {
+            if (!this.service.testCharacteristic(this.api.hap.Characteristic.Saturation)) {
+                this.log('Adding Saturation Characteristic')
+                this.service
+                    .getCharacteristic(this.api.hap.Characteristic.Saturation)
+                    .on('get', this.onGetSaturation.bind(this))
+                    .on('set', this.onSetSaturation.bind(this));
+            }
+            // update CurrentSaturation
+            this.currentSaturation = isSaturation1 ? message['HSBColor'] : message['HSBColor' + this.mqttIndex]
+            this.currentSaturation = parseInt(this.currentSaturation.split(',')[1])
+            this.service
+                .getCharacteristic(this.api.hap.Characteristic.Saturation)
+                .updateValue(this.currentSaturation)
+            this.log('Updated CurrentSaturation: %d', this.currentSaturation)
+        }
+
         var isDimmer1 = message.hasOwnProperty('Dimmer') && this.mqttIndex == 1
         var isDimmerN = message.hasOwnProperty('Dimmer' + this.mqttIndex)
 
         if (isDimmer1 || isDimmerN) {
+            if (!this.service.testCharacteristic(this.api.hap.Characteristic.Brightness)) {
+                this.log('Adding Brightness Characteristic')
+                this.service
+                    .getCharacteristic(this.api.hap.Characteristic.Brightness)
+                    .on('get', this.onGetBrightness.bind(this))
+                    .on('set', this.onSetBrightness.bind(this));
+            }
             // update CurrentBrightness
             this.currentBrightness = isDimmer1 ? message['Dimmer'] : message['Dimmer' + this.mqttIndex]
             this.service
@@ -90,17 +152,42 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
         callback(null)
     }
 
+    onGetHue(callback) {
+        this.log('Requested CurrentHue: %d', this.currentHue)
+        callback(null, this.currentHue)
+    }
+
+    onSetHue(hue, callback) {
+        this.log('Set Hue: %d', hue)
+        this.currentHue = hue
+        this.mqttClient.publish(this.mqttCommandHueTopic, "" + this.currentHue, this.mqttOptions)
+        callback(null)
+    }
+
+    onGetSaturation(callback) {
+        this.log('Requested CurrentSaturation: %d', this.currentSaturation)
+        callback(null, this.currentSaturation)
+    }
+
+    onSetSaturation(saturation, callback) {
+        this.log('Set Saturation: %d', saturation)
+        this.currentSaturation = saturation
+        this.mqttClient.publish(this.mqttCommandSaturationTopic, "" + this.currentSaturation, this.mqttOptions)
+        callback(null)
+    }
+
     onGetBrightness(callback) {
         this.log('Requested CurrentBrightness: %d', this.currentBrightness)
         callback(null, this.currentBrightness)
     }
 
     onSetBrightness(brightness, callback) {
-        this.log('Set Brighness: %d', brightness)
+        this.log('Set Brightness: %d', brightness)
         this.currentBrightness = brightness
-        this.mqttClient.publish(this.mqttDimmerTopic, "" + this.currentBrightness, this.mqttOptions)
+        this.mqttClient.publish(this.mqttCommandBrightnessTopic, "" + this.currentBrightness, this.mqttOptions)
         callback(null)
     }
+
 }
 
 module.exports = MqttTasmotaLightBulbAccessory

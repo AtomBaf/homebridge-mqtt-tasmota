@@ -48,6 +48,7 @@ class MqttTasmotaHumidityAccessory extends MqttTasmotaBaseAccessory {
                     .getCharacteristic(this.api.hap.Characteristic.CurrentRelativeHumidity)
                     .updateValue(this.currentHumidity)
                 this.log('Updated CurrentHumidity: %f', this.currentHumidity)
+                break
             }
         }
     }
