@@ -47,6 +47,7 @@ class MqttTasmotaTemperatureAccessory extends MqttTasmotaBaseAccessory {
                     .getCharacteristic(this.api.hap.Characteristic.CurrentTemperature)
                     .updateValue(this.currentTemperature)
                 this.log('Updated CurrentTemperature: %f', this.currentTemperature)
+                break
             }
         }
     }
