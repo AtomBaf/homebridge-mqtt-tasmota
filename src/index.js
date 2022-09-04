@@ -1,22 +1,22 @@
 var blinds = require('./blinds')
 var switches = require('./switch')
-var temperature = require('./temperature')
-var humidity = require('./humidity')
 var smoke = require('./smoke')
 var doorbell = require('./doorbell')
 var fan = require('./fan')
 var lightbulb = require('./lightbulb')
+var sensor = require('./sensor')
 
 
 handlers = {
     'mqtt-tasmota-blinds': blinds,
     'mqtt-tasmota-switch': switches,
-    'mqtt-tasmota-temperature': temperature,
-    'mqtt-tasmota-humidity': humidity,
+    'mqtt-tasmota-temperature': sensor,
+    'mqtt-tasmota-humidity': sensor,
     'mqtt-tasmota-smoke': smoke,
     'mqtt-tasmota-doorbell': doorbell,
     'mqtt-tasmota-fan': fan,
-    'mqtt-tasmota-lightbulb': lightbulb
+    'mqtt-tasmota-lightbulb': lightbulb,
+    'mqtt-tasmota-sensor': sensor
 }
 
 class MqttTasmotaAccessory {
@@ -25,6 +25,9 @@ class MqttTasmotaAccessory {
         log('New mqtt-tasmota accessory', config.accessory)
         if (config.accessory == 'mqtt-tasmota') {
             this.type = 'mqtt-tasmota-' + config['type']
+            // include type in the uuid_base of the config to prevent duplicate UUIDs
+            // since homebridge will generate a unique id with only the name for a given accessory
+            config.uuid_base = config.type + ':' + config.name 
         } else {
             // deprecated handler declaration
             this.type = config.accessory

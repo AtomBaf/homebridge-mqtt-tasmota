@@ -10,34 +10,12 @@ This is an all-in-one homebridge plugin to control various tasmota devices via M
 
 Since Tasmota MQTT topics are well known for a given device type, all the MQTT topics will be computed according to the device name (%topic% in the tasmota settings).
 
-## Breaking change on 0.4.0
-To enable a nice homebridge config UI, only one accessory type has to be defined.
-So, now there is only one `mqtt-tasmota` accesory along with a new `type` property.
-
-For instance, a previous accessory definition was like
-```
-        {
-            "accessory": "mqtt-tasmota-blinds",
-            "name": "Living Room Blinds",
-            "url": "mqtt://192.168.0.3",
-            "topic": "living_room_shutter",
-            "index": "1"
-        },
-```
-and should be changed to
-```
-        {
-            "accessory": "mqtt-tasmota",
-            "type": "blinds",
-            "name": "Living Room Blinds",
-            "url": "mqtt://192.168.0.3",
-            "topic": "living_room_shutter",
-            "index": "1"
-        },
-```
+## Requirements
+ - A MQTT broker (mosquitto for instance)
+ - A Tasmota flashed device (v9.3 or up)
+ - Homebridge (v1.0.0 or up)
 
 ## Tested with
- - Tasmota 9.3.1 Kenneth, 9.4.0 Leslie, 9.5.0 Michael, 10.1.0 Noelle
  - Sonoff devices :
     - RFR3
     - MINI
@@ -52,19 +30,19 @@ and should be changed to
 ## TODO
  - for malfunctioning devices, get their state at startup and show them as broken
  - create a platform API and enable auto-discover of all tasmota devices
- - add support for power switch
  - add logs for sensors (temp, hum, watt, ...)
 
 ## Installation
 
-If you are new to Homebridge, please first read the Homebridge documentation. To install the plugin use:
+If you are new to Homebridge, please first read the Homebridge documentation.
+To install the plugin use:
 ```
 sudo npm install homebridge-mqtt-tasmota -g
 ```
 
 ## Common Configuration settings
 
-### config.json example (for blinds, switches, humidity, smoke, doorbell, temp, and fan)
+### config.json example (for blinds, switches, smoke, doorbell, sensor, and fan)
 ```
 {
     "bridge": {
@@ -121,17 +99,10 @@ sudo npm install homebridge-mqtt-tasmota -g
         },
         {
             "accessory": "mqtt-tasmota",
-            "type": "humidity",
-            "name": "Lounge Humidity",
+            "type": "sensor",
+            "name": "Lounge Temp&Humidity",
             "url": "mqtt://192.168.0.3",
             "topic": "lounge_temp"  
-        },
-        {
-            "accessory": "mqtt-tasmota",
-            "type": "temperature",
-            "name": "Lounge Temp",
-            "url": "mqtt://192.168.0.3",
-            "topic": "lounge_temp"
         },
         {
             "accessory": "mqtt-tasmota",
@@ -139,14 +110,6 @@ sudo npm install homebridge-mqtt-tasmota -g
             "name": "Fan",
             "url": "mqtt://192.168.0.3",
             "topic": "lounge_fan"
-        }
-    ],
-
-    "platforms": [
-        {
-            "platform": "mqtt-tasmota",
-            "name": "mqtt-tasmota",
-            "url": "mqtt://192.168.0.3"
         }
     ]
 }
@@ -157,10 +120,10 @@ One single `mqtt-tasmota` type is supported, with `type` as one of:
  - blinds
  - doorbell
  - fan
- - humidity
+ - lightbulb
  - smoke
  - switch
- - temperature
+ - sensor (for both temperature and humidity)
 
 
 ### Common Mandatory settings
@@ -184,7 +147,7 @@ One single `mqtt-tasmota` type is supported, with `type` as one of:
 | serialNumberMAC | Serial number of your device. | 01.01.01.01 |
 
 
-## Dedicated Switch settings
+## Dedicated Switch/Lightbulb settings
 ### Optional settings
 | Variable | Description | Example | Default Value
 | --- | --- | --- | --- |
@@ -212,5 +175,4 @@ Use these variables to override the computed topics (topic + index).
 Adding support for a new device type should be as simple as add a new `device_type.js` file in the `src` directory
 Then:
  - add the device type in the main `src/ìndex.js` file
- - add a dedicated section in the `config.schema.json` file is necessary
-
+ - add a dedicated section in the `config.schema.json` file if necessary
