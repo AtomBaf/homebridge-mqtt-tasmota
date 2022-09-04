@@ -2,7 +2,7 @@
   "private": false,
   "name": "homebridge-mqtt-tasmota",
   "displayName": "Homebridge MQTT Tasmota",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "A homebridge plugin to control tasmota devices via mqtt",
   "main": "src/index.js",
   "scripts": {
