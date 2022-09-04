@@ -79,12 +79,8 @@
             "enum": ["fan"]
           },
           {
-            "title": "Temperature sensor",
-            "enum": ["temperature"]
-          },
-          {
-            "title": "Humidity sensor",
-            "enum": ["humidity"]
+            "title": "Temperature/Humidity sensor",
+            "enum": ["sensor"]
           },
           {
             "title": "Smoke detector",
