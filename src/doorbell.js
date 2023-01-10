@@ -8,8 +8,7 @@ class MqttTasmotaDoorbellAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['topic']
-        this.mqttTeleTopic = config["teleTopic"] || 'tele/' + this.mqttTopic + '/STATE'
+        this.mqttTeleTopic = config['teleTopic'] || this.buildTopic('tele', 'STATE')
 
         // STATE vars
         this.currentDoorbell = false; // last known state

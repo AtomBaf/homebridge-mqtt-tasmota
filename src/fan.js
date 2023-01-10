@@ -9,10 +9,10 @@ class MqttTasmotaFanAccessory extends MqttTasmotaBaseAccessory {
 
         // TASMOTA vars
         this.mqttTopic = config['topic']
-        this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT'
-        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/FANSPEED'
-        this.mqttCommandStateTopic = config['commandStateTopic'] || 'cmnd/' + this.mqttTopic + '/STATE'
-        this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/STATE'
+        this.mqttResultTopic = config['resultTopic'] || this.buildTopic('stat', 'RESULT')
+        this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'FANSPEED')
+        this.mqttCommandStateTopic = config['commandStateTopic'] || this.buildTopic('cmnd', 'STATE')
+        this.mqttTeleTopic = config['teleTopic'] || this.buildTopic('tele', 'STATE')
 
         // STATE vars
         this.currentSpeed = 0

@@ -11,15 +11,14 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
         this.icon = config['icon'] || 'lightbulb'
 
         // TASMOTA vars
-        this.mqttTopic = config['topic']
         this.mqttIndex = config['index'] || ''
-        this.mqttResultTopic = config['resultTopic'] || 'stat/' + this.mqttTopic + '/RESULT' 
-        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/POWER' + this.mqttIndex
-        this.mqttCommandStateTopic = config['commandStateTopic'] || 'cmnd/' + this.mqttTopic + '/STATE'
-        this.mqttCommandHueTopic = config['commandHueTopic'] || 'cmnd/' + this.mqttTopic + '/hsbcolor1' + this.mqttIndex
-        this.mqttCommandSaturationTopic = config['commandSaturationTopic'] || 'cmnd/' + this.mqttTopic + '/hsbcolor2' + this.mqttIndex
-        this.mqttCommandBrightnessTopic = config['commandBrightnessTopic'] || config['commandDimmerTopic'] || 'cmnd/' + this.mqttTopic + '/Dimmer' + this.mqttIndex
-        this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/STATE'
+        this.mqttResultTopic = config['resultTopic'] || this.buildTopic('stat', 'RESULT' )
+        this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'POWER' + this.mqttIndex)
+        this.mqttCommandStateTopic = config['commandStateTopic'] || this.buildTopic('cmnd', 'STATE')
+        this.mqttCommandHueTopic = config['commandHueTopic'] || this.buildTopic('cmnd', 'hsbcolor1' + this.mqttIndex)
+        this.mqttCommandSaturationTopic = config['commandSaturationTopic'] || this.buildTopic('cmnd', 'hsbcolor2' + this.mqttIndex)
+        this.mqttCommandBrightnessTopic = config['commandBrightnessTopic'] || config['commandDimmerTopic'] || this.buildTopic('cmnd', 'Dimmer' + this.mqttIndex)
+        this.mqttTeleTopic = config['teleTopic'] || this.buildTopic('tele', 'STATE')
 
         // STATE vars
         this.currentPower = 'OFF'; // last known power (OFF)
