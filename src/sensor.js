@@ -10,8 +10,8 @@ class MqttTasmotaSensorAccessory extends MqttTasmotaBaseAccessory {
 
         // TASMOTA vars
         this.mqttTopic = config['topic']
-        this.mqttTeleTopic = config['teleTopic'] || 'tele/' + this.mqttTopic + '/SENSOR'
-        this.mqttCommandTopic = config['commandTopic'] || 'cmnd/' + this.mqttTopic + '/TelePeriod'
+        this.mqttTeleTopic = config['teleTopic'] || this.buildTopic('tele', 'SENSOR')
+        this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'TelePeriod')
 
         // STATE vars
         this.currentHumidity = -99; // last known Humidity

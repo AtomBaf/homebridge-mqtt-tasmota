@@ -16,6 +16,10 @@ class MqttTasmotaBase {
         this.mqttPassword = config['password']
         this.mqttClientId = 'mqttjs_' + Math.random().toString(16).substr(2, 8)
 
+        // MQTT topics, as seen in Tasmota screen
+        this.mqttTopic = config['topic']
+        this.mqttFullTopic = config['fullTopic'] || '%prefix%/%topic%/'
+
         // MQTT options
         this.mqttOptions = {
             keepalive: 10,
@@ -33,6 +37,18 @@ class MqttTasmotaBase {
         if (autoConnect) {
             this.connectMqttClient()
         }
+    }
+
+    buildTopic(prefix, command) {
+        let t = this.mqttFullTopic.replace('%prefix%', prefix)
+        t = t.replace('%topic%', this.mqttTopic)
+        t += command
+
+        if (this.mqttDebug) {
+            this.log('Built topic = "%s"', t)
+        }
+
+        return t
     }
 
     connectMqttClient() {
