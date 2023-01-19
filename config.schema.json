@@ -1,56 +1,56 @@
 {
   "pluginAlias": "mqtt-tasmota",
   "pluginType": "accessory",
-  "layout": [{
+  "layout": [
+    {
       "type": "flex",
       "flex-flow": "row wrap",
-      "items": ["name"]
+      "items": [{
+        "key": "name",
+        "flex": "5 5 500px"
+      },{
+        "key": "debug",
+        "flex": "1 1 100px",
+        "default": false
+      }]
     },
     {
       "type": "flex",
       "flex-flow": "row wrap",
       "items": [{
-          "key": "topic",
-          "flex": "5 5 500px"
-        },
-        {
-          "key": "debug",
-          "flex": "1 1 100px",
-          "default": false
-        }]
+        "key": "topic",
+        "flex": "3 3 300px"
+      },{
+        "key": "fullTopic",
+        "flex": "3 3 300px"
+      }]
     },
     {
       "type": "flex",
       "flex-flow": "row wrap",
       "items": [{
-          "key": "type",
-          "flex": "4 4 400px"
-        },
-        {
-          "key": "index",
-          "flex": "2 2 200px"
-        }
-      ]
+        "key": "type",
+        "flex": "4 4 400px"
+      },{
+        "key": "index",
+        "flex": "2 2 200px"
+      }]
     },
 
     {
       "type": "flex",
       "flex-flow": "row wrap",
-      "items": [
-        {
-          "flex": "3 3 300px",
-          "key": "url"
-        },
-        {
-          "flex": "2 2 200px",
-          "key": "username"
-        },
-        {
-          "flex": "2 2 200px",
-          "key": "password",
-          "type": "password"
-        }
-      ]
+      "items": [{
+        "flex": "4 4 400px",
+        "key": "url"
+      },{
+        "flex": "1 1 100px",
+        "key": "username"
+      },{
+        "flex": "1 1 100px",
+        "key": "password",
+        "type": "password"
+      }]
     }
   ],
   "schema": {
@@ -73,24 +73,19 @@
           },{
             "title": "Light Bulb",
             "enum": ["lightbulb"]
-          },
-          {
+          },{
             "title": "Fan",
             "enum": ["fan"]
-          },
-          {
+          },{
             "title": "Temperature/Humidity sensor",
             "enum": ["sensor"]
-          },
-          {
+          },{
             "title": "Smoke detector",
             "enum": ["smoke"]
-          },
-          {
+          },{
             "title": "Doorbell",
             "enum": ["doorbell"]
-          },
-          {
+          },{
             "title": "Blinds & Shutters",
             "enum": ["blinds"]
           }
@@ -121,6 +116,13 @@
         "type": "string",
         "required": true,
         "description": "Tasmota device topic, as shown in its MQTT settings"
+      },
+      "fullTopic": {
+        "title": "Full Topic",
+        "type": "string",
+        "required": true,
+        "description": "Tasmota device full topic, as shown in its MQTT settings",
+        "default": "%topic%/%prefix%/"
       },
       "debug": {
         "title": "Debug",
