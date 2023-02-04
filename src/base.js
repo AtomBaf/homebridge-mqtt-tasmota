@@ -71,6 +71,7 @@ class MqttTasmotaBase {
         if (this.mqttDebug) {
             this.log('Message received %s, %s', topic, message.toString('utf-8'))
         }
+        return false
     }
 }
 

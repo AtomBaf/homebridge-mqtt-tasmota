@@ -40,7 +40,9 @@ class MqttTasmotaFanAccessory extends MqttTasmotaBaseAccessory {
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         message = JSON.parse(message.toString('utf-8'))
 
@@ -61,26 +63,26 @@ class MqttTasmotaFanAccessory extends MqttTasmotaBaseAccessory {
     // Homebridge handlers
     onGetOn(callback) {
         this.log('Requested CurrentPower: %s', this.currentSpeed > 0)
-        callback(null, this.currentSpeed > 0)
+        callback(this.currentStatusCode(), this.currentSpeed > 0)
     }
 
     onSetOn(power, callback) {
         this.log('Set Power: %s', power)
         this.currentSpeed = !power ? 0 : this.currentSpeed == 0 ? 3 : this.currentSpeed
         this.mqttClient.publish(this.mqttCommandTopic, "" + this.currentSpeed, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 
     onGetSpeed(callback) {
         this.log('Requested CurrentSpeed: %s', this.currentPower)
-        callback(null, this.currentSpeed)
+        callback(this.currentStatusCode(), this.currentSpeed)
     }
 
     onSetSpeed(speed, callback) {
         this.log('Set Speed: %s', speed)
         this.currentSpeed = speed
         this.mqttClient.publish(this.mqttCommandTopic, "" + this.currentSpeed, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 }
 

@@ -37,7 +37,9 @@ class MqttTasmotaSensorAccessory extends MqttTasmotaBaseAccessory {
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         // message looks like this
         // {"Time":"2020-10-31T15:52:28","DHT11":{"Temperature":18.5,"Humidity":34.0,"DewPoint":2.3},"TempUnit":"C"}
@@ -75,12 +77,12 @@ class MqttTasmotaSensorAccessory extends MqttTasmotaBaseAccessory {
     }
     onGetCurrentRelativeHumidity(callback) {
         this.log('Requested CurrentHumidity: %f', this.currentHumidity)
-        callback(null, this.currentHumidity)
+        callback(this.currentStatusCode(), this.currentHumidity)
     }
 
     onGetCurrentTemperature(callback) {
         this.log('Requested CurrentTemperature: %f', this.currentTemperature)
-        callback(null, this.currentTemperature)
+        callback(this.currentStatusCode(), this.currentTemperature)
     }
 }
 

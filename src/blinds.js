@@ -48,7 +48,9 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         // this callback can be called from both the STAT topic and the TELE topic
         // JSON format is nearly the same, eg:
@@ -109,17 +111,17 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
     // Homebridge handlers
     onGetCurrentPosition(callback) {
         this.log('Requested CurrentPosition: %s', this.lastPosition)
-        callback(null, this.lastPosition)
+        callback(this.currentStatusCode(), this.lastPosition)
     }
 
     onGetPositionState(callback) {
         this.log('Requested PositionState: %s', this.currentPositionState)
-        callback(null, this.currentPositionState)
+        callback(this.currentStatusCode(), this.currentPositionState)
     }
 
     onGetTargetPosition(callback) {
         this.log('Requested TargetPosition: %s', this.currentTargetPosition)
-        callback(null, this.currentTargetPosition)
+        callback(this.currentStatusCode(), this.currentTargetPosition)
     }
 
     onSetTargetPosition(pos, callback) {
@@ -136,7 +138,7 @@ class MqttTasmotaBlindsAccessory extends MqttTasmotaBaseAccessory {
             if (counter < 0) {
                 counter = 0
             }
-            callback(null)
+            callback(this.currentStatusCode())
         }, counter * delay)
         counter++
     }
