@@ -23,10 +23,17 @@ class MqttTasmotaSmokeAccessory extends MqttTasmotaBaseAccessory {
             .on('get', this.onGetOn.bind(this))
     }
 
+    currentStatusCode() {
+        // sensor are always considered alive?
+        return null
+    }
+
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         // message is raw string
         this.currentSmoke = message.toString('utf-8').toLowerCase() === 'on'
@@ -39,7 +46,7 @@ class MqttTasmotaSmokeAccessory extends MqttTasmotaBaseAccessory {
     // Homebridge handlers
     onGetOn(callback) {
         this.log('Requested CurrentSmoke: %s', this.currentSmoke)
-        callback(null, this.currentSmoke)
+        callback(this.currentStatusCode(), this.currentSmoke)
     }
 }
 

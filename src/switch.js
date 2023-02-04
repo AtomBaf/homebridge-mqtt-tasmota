@@ -35,7 +35,9 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         // this callback can be called from both the STAT topic and the TELE topic
         // JSON format is nearly the same, eg:
@@ -61,14 +63,14 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
     // Homebridge handlers
     onGetOn(callback) {
         this.log('Requested CurrentPower: %s', this.currentPower)
-        callback(null, this.currentPower === 'ON')
+        callback(this.currentStatusCode(), this.currentPower === 'ON')
     }
 
     onSetOn(power, callback) {
         this.log('Set Power: %s', power)
         this.currentPower = power ? 'ON' : 'OFF'
         this.mqttClient.publish(this.mqttCommandTopic, this.currentPower, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 }
 

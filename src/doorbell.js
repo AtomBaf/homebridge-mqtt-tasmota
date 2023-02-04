@@ -25,7 +25,9 @@ class MqttTasmotaDoorbellAccessory extends MqttTasmotaBaseAccessory {
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         // message is raw string
         this.currentDoorbell = message.toString('utf-8').toLowerCase() === 'on'
@@ -40,7 +42,7 @@ class MqttTasmotaDoorbellAccessory extends MqttTasmotaBaseAccessory {
     // Homebridge handlers
     onGetOn(callback) {
         this.log('Requested CurrentDoorbell: %s', this.currentDoorbell)
-        callback(null, this.currentDoorbell)
+        callback(this.currentStatusCode(), this.currentDoorbell)
     }
 }
 

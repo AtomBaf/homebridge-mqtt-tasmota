@@ -53,7 +53,9 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
     // MQTT handler
     onMqttMessage(topic, message) {
 
-        super.onMqttMessage(topic, message)
+        if (super.onMqttMessage(topic, message)) {
+             return true
+        }
 
         // this callback can be called from both the STAT topic and the TELE topic
         // JSON format is nearly the same, eg:
@@ -75,6 +77,7 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
             this.service
                 .getCharacteristic(this.api.hap.Characteristic.On)
                 .updateValue(this.currentPower === 'ON')
+
             this.log('Updated CurrentPower: %s', this.currentPower)
         }
 
@@ -140,51 +143,51 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
 
     // Homebridge handlers
     onGetOn(callback) {
-        this.log('Requested CurrentPower: %s', this.currentPower)
-        callback(null, this.currentPower === 'ON')
+        this.log('Requested CurrentPower: %s, %s', this.lwsState, this.currentPower)
+        callback(this.currentStatusCode(), this.currentPower === 'ON')
     }
 
     onSetOn(power, callback) {
-        this.log('Set Power: %s', power)
+        this.log('Set Power: %s, %s', this.lwsState, power)
         this.currentPower = power ? 'ON' : 'OFF'
         this.mqttClient.publish(this.mqttCommandTopic, this.currentPower, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 
     onGetHue(callback) {
         this.log('Requested CurrentHue: %d', this.currentHue)
-        callback(null, this.currentHue)
+        callback(this.currentStatusCode(), this.currentHue)
     }
 
     onSetHue(hue, callback) {
         this.log('Set Hue: %d', hue)
         this.currentHue = hue
         this.mqttClient.publish(this.mqttCommandHueTopic, "" + this.currentHue, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 
     onGetSaturation(callback) {
         this.log('Requested CurrentSaturation: %d', this.currentSaturation)
-        callback(null, this.currentSaturation)
+        callback(this.currentStatusCode(), this.currentSaturation)
     }
 
     onSetSaturation(saturation, callback) {
         this.log('Set Saturation: %d', saturation)
         this.currentSaturation = saturation
         this.mqttClient.publish(this.mqttCommandSaturationTopic, "" + this.currentSaturation, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 
     onGetBrightness(callback) {
         this.log('Requested CurrentBrightness: %d', this.currentBrightness)
-        callback(null, this.currentBrightness)
+        callback(this.currentStatusCode(), this.currentBrightness)
     }
 
     onSetBrightness(brightness, callback) {
         this.log('Set Brightness: %d', brightness)
         this.currentBrightness = brightness
         this.mqttClient.publish(this.mqttCommandBrightnessTopic, "" + this.currentBrightness, this.mqttOptions)
-        callback(null)
+        callback(this.currentStatusCode())
     }
 
 }
