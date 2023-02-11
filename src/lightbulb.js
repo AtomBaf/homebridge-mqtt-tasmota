@@ -143,12 +143,12 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
 
     // Homebridge handlers
     onGetOn(callback) {
-        this.log('Requested CurrentPower: %s, %s', this.lwsState, this.currentPower)
+        this.log('Requested CurrentPower: %s', this.currentPower)
         callback(this.currentStatusCode(), this.currentPower === 'ON')
     }
 
     onSetOn(power, callback) {
-        this.log('Set Power: %s, %s', this.lwsState, power)
+        this.log('Set Power: %s', power)
         this.currentPower = power ? 'ON' : 'OFF'
         this.mqttClient.publish(this.mqttCommandTopic, this.currentPower, this.mqttOptions)
         callback(this.currentStatusCode())

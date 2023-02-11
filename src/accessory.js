@@ -17,7 +17,7 @@ class MqttTasmotaBaseAccessory extends MqttTasmotaBase {
         this.mqttLWTTopic = config['lwtTopic'] || this.buildTopic('tele', 'LWT')
         this.log('LWT Status subscribe %s', this.mqttLWTTopic)
         this.mqttClient.subscribe(this.mqttLWTTopic)
-        this.lwtStatus = 'Offline'
+        this.lwtStatus = 'Offline' // assume Offline by default
     }
 
     // Homebridge callback to get service list
@@ -58,6 +58,7 @@ class MqttTasmotaBaseAccessory extends MqttTasmotaBase {
     }
 
     currentStatusCode() {
+        //return null
         return this.lwtStatus == 'Offline' ? -1 : null
     }
 }
