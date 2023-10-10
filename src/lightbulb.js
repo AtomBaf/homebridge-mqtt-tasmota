@@ -18,6 +18,7 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
         this.mqttCommandHueTopic = config['commandHueTopic'] || this.buildTopic('cmnd', 'hsbcolor1' + this.mqttIndex)
         this.mqttCommandSaturationTopic = config['commandSaturationTopic'] || this.buildTopic('cmnd', 'hsbcolor2' + this.mqttIndex)
         this.mqttCommandBrightnessTopic = config['commandBrightnessTopic'] || config['commandDimmerTopic'] || this.buildTopic('cmnd', 'Dimmer' + this.mqttIndex)
+        this.mqttCommandColorTempTopic = config['commandColorTempTopic'] || this.buildTopic('cmnd', 'CT' + this.mqttIndex)
         this.mqttTeleTopic = config['teleTopic'] || this.buildTopic('tele', 'STATE')
 
         // STATE vars
@@ -25,6 +26,7 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
         this.currentHue = 0; // last known hue (0)
         this.currentSaturation = 0; // last known saturation (0)
         this.currentBrightness = 100; // last known brightness (100)
+        this.currentColorTemperature = 153; // last known color temperature (153)
 
         this.mqttClient.subscribe(this.mqttResultTopic)
         this.mqttClient.subscribe(this.mqttTeleTopic)
@@ -139,6 +141,25 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
                 .updateValue(this.currentBrightness)
             this.log('Updated CurrentBrightness: %d', this.currentBrightness)
         }
+
+        var isColorTemp1 = message.hasOwnProperty('CT') && this.mqttIndex == 1
+        var isColorTempN = message.hasOwnProperty('CT' + this.mqttIndex)
+
+        if (isColorTemp1 || isColorTempN) {
+            if (!this.service.testCharacteristic(this.api.hap.Characteristic.ColorTemperature)) {
+                this.log('Adding ColorTemperature Characteristic')
+                this.service
+                    .getCharacteristic(this.api.hap.Characteristic.ColorTemperature)
+                    .on('get', this.onGetColorTemperature.bind(this))
+                    .on('set', this.onSetColorTemperature.bind(this));
+            }
+            // update CurrentColorTemperature
+            this.currentColorTemperature = isColorTemp1 ? message['CT'] : message['CT' + this.mqttIndex]
+            this.service
+                .getCharacteristic(this.api.hap.Characteristic.ColorTemperature)
+                .updateValue(this.currentColorTemperature)
+            this.log('Updated CurrentColorTemperature: %d', this.currentColorTemperature)
+        }
     }
 
     // Homebridge handlers
@@ -190,6 +211,17 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
         callback(this.currentStatusCode())
     }
 
+    onGetColorTemperature(callback) {
+        this.log('Requested CurrentColorTemperature: %d', this.currentColorTemperature)
+        callback(this.currentStatusCode(), this.currentColorTemperature)
+    }
+
+    onSetColorTemperature(colorTemperature, callback) {
+        this.log('Set ColorTemperature: %d', colorTemperature)
+        this.currentColorTemperature = colorTemperature
+        this.mqttClient.publish(this.mqttCommandColorTempTopic, "" + this.currentColorTemperature, this.mqttOptions)
+        callback(this.currentStatusCode())
+    }
 }
 
 module.exports = MqttTasmotaLightBulbAccessory
