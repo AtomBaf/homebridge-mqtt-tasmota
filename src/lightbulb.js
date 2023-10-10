@@ -217,6 +217,10 @@ class MqttTasmotaLightBulbAccessory extends MqttTasmotaBaseAccessory {
     }
 
     onSetColorTemperature(colorTemperature, callback) {
+        // Homebridge provides a range of 140-500, but Tasmota only supports 153-500
+        if (colorTemperature < 153) {
+            colorTemperature = 153
+        }
         this.log('Set ColorTemperature: %d', colorTemperature)
         this.currentColorTemperature = colorTemperature
         this.mqttClient.publish(this.mqttCommandColorTempTopic, "" + this.currentColorTemperature, this.mqttOptions)
