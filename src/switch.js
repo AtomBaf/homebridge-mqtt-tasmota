@@ -8,7 +8,6 @@ class MqttTasmotaSwitchAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['topic']
         this.mqttIndex = config['index'] || ''
         this.mqttResultTopic = config['resultTopic'] || this.buildTopic('stat', 'RESULT')
         this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'POWER' + this.mqttIndex)

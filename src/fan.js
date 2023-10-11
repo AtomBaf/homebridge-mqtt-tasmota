@@ -8,7 +8,6 @@ class MqttTasmotaFanAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['topic']
         this.mqttResultTopic = config['resultTopic'] || this.buildTopic('stat', 'RESULT')
         this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'FANSPEED')
         this.mqttCommandStateTopic = config['commandStateTopic'] || this.buildTopic('cmnd', 'STATE')
