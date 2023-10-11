@@ -137,7 +137,7 @@
         "title": "Index",
         "type": "integer",
         "condition": {
-          "functionBody": "return model.type === 'switch' || model.type === 'blinds' || model.type === 'valve';"
+          "functionBody": "return ['switch', 'blinds', 'valve', 'lightbulb'].includes(model.type);"
         },
         "minimum": 1
       }
