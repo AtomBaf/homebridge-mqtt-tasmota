@@ -14,7 +14,7 @@ class MqttTasmotaSensorAccessory extends MqttTasmotaBaseAccessory {
         this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'TelePeriod')
 
         // STATE vars
-        this.currentHumidity = -99; // last known Humidity
+        this.currentHumidity = 0; // last known Humidity
         this.currentTemperature = -99.0; // last known temperature
 
         this.mqttClient.subscribe(this.mqttTeleTopic)
