@@ -5,6 +5,7 @@ var doorbell = require('./doorbell')
 var fan = require('./fan')
 var lightbulb = require('./lightbulb')
 var sensor = require('./sensor')
+var valve = require('./valve')
 
 
 handlers = {
@@ -16,7 +17,8 @@ handlers = {
     'mqtt-tasmota-doorbell': doorbell,
     'mqtt-tasmota-fan': fan,
     'mqtt-tasmota-lightbulb': lightbulb,
-    'mqtt-tasmota-sensor': sensor
+    'mqtt-tasmota-sensor': sensor,
+    'mqtt-tasmota-valve': valve
 }
 
 class MqttTasmotaAccessory {

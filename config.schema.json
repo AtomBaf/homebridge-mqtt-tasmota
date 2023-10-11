@@ -88,6 +88,9 @@
           },{
             "title": "Blinds & Shutters",
             "enum": ["blinds"]
+          },{
+            "title": "Valve",
+            "enum": ["valve"]
           }
         ]
       },
@@ -134,7 +137,7 @@
         "title": "Index",
         "type": "integer",
         "condition": {
-          "functionBody": "return model.type === 'switch' || model.type === 'blinds';"
+          "functionBody": "return model.type === 'switch' || model.type === 'blinds' || model.type === 'valve';"
         },
         "minimum": 1
       }
