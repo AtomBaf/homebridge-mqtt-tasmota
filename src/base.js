@@ -5,7 +5,8 @@ class MqttTasmotaBase {
 
     constructor(log, config, api, autoConnect=true) {
         // GLOBAL vars
-        this.log = log
+        this.debug = config['debug'] || false
+        this.log = function(...args) { if (this.debug) {log(...args)}}
         this.config = config
         this.api = api
 
