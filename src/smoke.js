@@ -8,7 +8,6 @@ class MqttTasmotaSmokeAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['topic']
         this.mqttTeleTopic = config["teleTopic"] || this.buildTopic('tele', 'STATE')
 
         // STATE vars

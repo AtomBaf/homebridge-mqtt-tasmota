@@ -9,7 +9,6 @@ class MqttTasmotaSensorAccessory extends MqttTasmotaBaseAccessory {
         super(log, config, api)
 
         // TASMOTA vars
-        this.mqttTopic = config['topic']
         this.mqttTeleTopic = config['teleTopic'] || this.buildTopic('tele', 'SENSOR')
         this.mqttCommandTopic = config['commandTopic'] || this.buildTopic('cmnd', 'TelePeriod')
 
