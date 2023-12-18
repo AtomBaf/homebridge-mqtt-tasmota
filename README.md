@@ -166,7 +166,7 @@ One single `mqtt-tasmota` type is supported, with `type` being one of:
 | teleTopic | Telemetry topic (for instance position of shutter from 0 to 100) | /tele/{topic}/SENSOR | /tele/my_blind/SENSOR | :white_check_mark: |
 | commandTopic | Command topic (for instance to set position of shutter to set position from 0 to 100) | /cmnd/{topic}/ShutterPosition{index} | /cmnd/my_blind/ShutterPosition1 | :white_check_mark: |
 | resultTopic | Result topic (for instance to get shutter position from 0 to 100) | /stat/{topic}/RESULT | /stat/my_blind/RESULT | :white_check_mark: |
-| shutter | shutterName | Shutter name as seen in [tasmota](https://tasmota.github.io/docs/). | Shutter{index} | Shutter1 | 
+| shutterName | Shutter name as seen in [tasmota](https://tasmota.github.io/docs/). | Shutter{index} | Shutter1 | :white_check_mark: |
 | <b>For devices with multiple accessories like switch, lightbulb, valve, shutter</b>
 | index | The device index in [tasmota](https://tasmota.github.io/docs/) (could be 1 to 4) | | 1 | :white_check_mark: |
 
