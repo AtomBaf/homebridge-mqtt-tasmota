@@ -5,13 +5,14 @@ var doorbell = require('./doorbell')
 var fan = require('./fan')
 var lightbulb = require('./lightbulb')
 var sensor = require('./sensor')
+var temperature = require('./temperature')
 var valve = require('./valve')
 
 
 handlers = {
     'mqtt-tasmota-blinds': blinds,
     'mqtt-tasmota-switch': switches,
-    'mqtt-tasmota-temperature': sensor,
+    'mqtt-tasmota-temperature': temperature,
     'mqtt-tasmota-humidity': sensor,
     'mqtt-tasmota-smoke': smoke,
     'mqtt-tasmota-doorbell': doorbell,

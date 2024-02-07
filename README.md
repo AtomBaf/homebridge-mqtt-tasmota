@@ -144,6 +144,7 @@ One single `mqtt-tasmota` type is supported, with `type` being one of:
  - smoke
  - switch
  - sensor (for both temperature and humidity)
+ - temperature (for temperature only)
  - valve
 
 
